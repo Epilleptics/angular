@@ -1,3 +1,9 @@
-<h1>
-  {{title}}
-</h1>
+<div gol-board-grid [dimension]="dimension">
+  <ng-template ngFor let-cellArray [ngForOf]="cellMatrix">
+    <ng-template ngFor let-cell [ngForOf]="cellArray">
+      <div gol-board-cell>
+        <app-cell-view [cell]="cell"></app-cell-view>
+      </div>
+    </ng-template>
+  </ng-template>
+</div>

@@ -1,10 +1,7 @@
-# Angular-Starter
+# Game of Life - Angular
 
-This project is a boilerplate for Angular-projects
+This project is an example project for [Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) projects, written in Angular with Observables.
 
-## Version
-
-The current Angular-version of this repository is `5.0.0-beta.4`
 
 ## Development server
 
