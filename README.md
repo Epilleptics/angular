@@ -1,10 +1,29 @@
-# Angular-Starter
+# Game of Life - Angular
 
-This project is a boilerplate for Angular-projects
+This project is a boilerplate for [Game of Life](https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life) projects, written in Angular.
 
-## Version
+## Usage
 
-The current Angular-version of this repository is `5.0.0-beta.4`
+* Import `BoardModule` as a dependency your module
+* Board
+  * Use the directive `gol-board-grid` on your container that will contain the cells
+  * Bind the property `dimension` to the size the board should later have (e.g. 50 for a 50x50 board)
+* Cells
+  * The directive `gol-board-cell` has to be applied to a wrapping-container of your cell
+
+## Example
+
+```
+<div gol-board-grid [dimension]="dimension">
+   <ng-template ngFor let-cellArray [ngForOf]="cellMatrix">
+     <ng-template ngFor let-cell [ngForOf]="cellArray">
+       <div gol-board-cell>
+         <app-cell-view [cell]="cell"></app-cell-view>
+       </div>
+     </ng-template>
+   </ng-template>
+ </div>
+ ```
 
 ## Development server
 
