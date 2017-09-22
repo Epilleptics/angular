@@ -1,28 +1,28 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { CellsTrackerService } from './cells-tracker.service';
+import { fromPattern, PATTERN } from "./example/patterns";
+import { BOARD_DIMENSION } from "./app.token";
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, AfterViewInit{
+export class AppComponent implements OnInit{
   public cellMatrix: Array<Array<Observable<boolean>>> = [];
-  private dimension = 100;
 
-  constructor(private cellTrackerService: CellsTrackerService) {}
+  constructor(
+    private cellTrackerService: CellsTrackerService,
+    @Inject(BOARD_DIMENSION) private dimension: number
+  ) {}
 
   ngOnInit(): void {
     for (let x = 0; x < this.dimension; ++x) {
       this.cellMatrix[x] = [];
       for (let y = 0; y < this.dimension; ++y) {
-        this.cellMatrix[x][y] = this.cellTrackerService.generateNewCell(x, y);
+        this.cellMatrix[x][y] = this.cellTrackerService.generateNewCell(x, y, fromPattern(this.dimension, PATTERN.SELF_DESTRCT));
       }
     }
-  }
-
-  ngAfterViewInit(): void {
-    this.cellTrackerService.start();
   }
 }

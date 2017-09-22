@@ -1,21 +1,21 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BoardGridDirective } from "./board-grid.directive";
 import { BoardService } from "./board.service";
-import { BoardCellComponent } from "./board-cell/board-cell.component";
+import { CellComponent } from "./cell/cell.component";
+import { GridComponent } from "./grid/grid.component";
 
 @NgModule({
   imports: [
     CommonModule
   ],
   declarations: [
-    BoardGridDirective,
-    BoardCellComponent
+    CellComponent,
+    GridComponent
   ],
   providers: [BoardService],
   exports: [
-    BoardGridDirective,
-    BoardCellComponent
+    CellComponent,
+    GridComponent
   ]
 })
 export class BoardModule { }

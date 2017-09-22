@@ -1,82 +1,37 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Observer } from 'rxjs/Observer';
-import { Cell } from './models/cell';
+import * as Rx from 'rxjs';
+import { TICK_DURATION } from "./app.token";
 
 @Injectable()
 export class CellsTrackerService {
-
-  private cells: Map<number, Map<number, Cell>>;
-
-  constructor() {
-    this.cells = new Map();
+  
+  private nextCellState: boolean[][] = [];
+  private cellState: boolean[][];
+  
+  private ticker = Rx.Observable.interval(this.tick_duration).do(_ => this.cellState = [...this.nextCellState.map(x => [...x])]).publish().refCount();
+  
+  constructor(
+    @Inject(TICK_DURATION) private tick_duration: number
+  ) {}
+  
+  private isCellAliveInNextTick(x: number, y: number): boolean {
+    const aliveCells = this.countLivingCellsAroundA(x, y);
+    return ((aliveCells === 2 && this.cellState[x][y]) || aliveCells === 3);
   }
-
-  private getTrueOrFalse(): boolean {
-    return Math.random() > 0.5;
+  
+  private countLivingCellsAroundA(x: number, y: number): number {
+    return this.cellState
+      .map((valX, iX) => valX
+        .filter((valY, iY) => ((iY !== y || iX !== x) && iY >= y - 1 && y + 1 >= iY && iX >= x - 1 && x + 1 >= iX) && valY))
+      .reduce((p, c) => p + c.length, 0);
   }
-
-  public generateNewCell(x: number, y: number): Observable<boolean> {
-    const isAlive = this.getTrueOrFalse();
-
-    let yDimension = this.cells.get(x);
-    if (!yDimension) {
-      yDimension = new Map();
-      this.cells.set(x, yDimension);
-    }
-    return Observable.create((observer: Observer<boolean>) => {
-      const cell: Cell = {
-        alive: isAlive,
-        observer: observer,
-        aliveInNextTick: false
-      };
-      yDimension.set(y, cell);
-      observer.next(isAlive);
-    });
-  }
-
-  public tick() {
-    this.cells.forEach((map: Map<number, Cell>, x: number) => {
-      map.forEach((cell: Cell, y: number) => {
-          const aliveCells = this.countLivingCellsAround(x, y);
-          let isAlive = false;
-          if ((aliveCells === 2 && cell.alive) || aliveCells === 3) {
-            isAlive = true;
-          }
-          cell.aliveInNextTick = isAlive;
-      });
-    });
-    this.cells.forEach((map: Map<number, Cell>, x: number) => {
-      map.forEach((cell: Cell, y: number) => {
-        if (cell.alive !== cell.aliveInNextTick) {
-          cell.alive = cell.aliveInNextTick;
-          cell.observer.next(cell.alive);
-        }
-      });
-    });
-  }
-
-  public start() {
-    setInterval(() => this.tick(), 2000);
-  }
-
-  private countLivingCellsAround(x: number, y: number): number {
-    let aliveCells = 0;
-    // noinspection TsLint
-    for (let cX = x - 1, maxX = x + 1; cX <= maxX; ++cX ){
-      // noinspection TsLint
-      for (let cY = y - 1, maxY = y + 1; cY <= maxY; ++cY) {
-        if (cX !== x || cY !== y) {
-          const yDimension = this.cells.get(cX);
-          if(yDimension) {
-            const cell = yDimension.get(cY);
-            if(cell && cell.alive) {
-              aliveCells++;
-            }
-          }
-        }
-      }
-    }
-    return aliveCells;
+  
+  public generateNewCell(x: number, y: number, pattern): Observable<boolean> {
+    const isAlive = pattern(x, y);
+    this.nextCellState[x] = this.nextCellState[x] || [];
+    this.nextCellState[x][y] = isAlive;
+    
+    return Observable.of(isAlive).merge(this.ticker.switchMap(_ => Observable.of(this.isCellAliveInNextTick(x, y))).do(alive => this.nextCellState[x][y] = alive));
   }
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Observable } from "rxjs/Observable";
 
 @Component({
@@ -6,13 +6,6 @@ import { Observable } from "rxjs/Observable";
   templateUrl: './cell-view.component.html',
   styleUrls: ['./cell-view.component.css']
 })
-export class CellViewComponent implements OnInit {
-
-  @Input() cell: Observable<boolean>;
-  public isAlive = false;
-
-  ngOnInit() {
-    this.cell.subscribe( alive => this.isAlive = alive);
-  }
-
+export class CellViewComponent {
+  @Input() alive$: Observable<boolean>;
 }

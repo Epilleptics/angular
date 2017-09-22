@@ -1,1 +1,1 @@
-<div class="cell" [ngClass]="{alive: isAlive}"></div>
+<div *ngIf="alive$ | async as alive" class="cell" [ngClass]="{alive: alive}"></div>

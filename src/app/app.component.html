@@ -1,9 +1,9 @@
-<div gol-board-grid [dimension]="dimension">
-  <ng-template ngFor let-cellArray [ngForOf]="cellMatrix">
-    <ng-template ngFor let-cell [ngForOf]="cellArray">
-      <div gol-board-cell>
-        <app-cell-view [cell]="cell"></app-cell-view>
-      </div>
+<gol-grid [dimension]="dimension">
+  <ng-template ngFor let-alive$Array [ngForOf]="cellMatrix">
+    <ng-template ngFor let-alive$ [ngForOf]="alive$Array">
+      <gol-cell>
+        <app-cell-view [alive$]="alive$"></app-cell-view>
+      </gol-cell>
     </ng-template>
   </ng-template>
-</div>
+</gol-grid>

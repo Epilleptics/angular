@@ -8,3 +8,8 @@
   right: 0;
   bottom: 0;
 }
+:host {
+  display: inline-block;
+  position: relative;
+  float: left;
+}

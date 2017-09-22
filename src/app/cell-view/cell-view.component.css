@@ -1,11 +1,7 @@
 .cell {
-  border: 0px solid grey;
   height: 100%;
   width: 100%;
-  background-color: transparent;
-  transition: background-color 1s;
 }
-.cell.alive {
+.alive {
   background-color: #8eff45;
-  transition: background-color 1s;
 }
