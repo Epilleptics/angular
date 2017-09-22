@@ -1,10 +1,11 @@
 import { Inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import * as Rx from 'rxjs';
-import { TICK_DURATION } from "./app.token";
+import { TICK_DURATION } from "./app.tokens";
+import { CellTracker } from "./model/cell-tracker";
 
 @Injectable()
-export class CellsTrackerService {
+export class CellTrackerService implements CellTracker{
   
   private nextCellState: boolean[][] = [];
   private cellState: boolean[][];
@@ -27,7 +28,7 @@ export class CellsTrackerService {
       .reduce((p, c) => p + c.length, 0);
   }
   
-  public generateNewCell(x: number, y: number, pattern): Observable<boolean> {
+  public generateNewCell(x: number, y: number, pattern: (x: number, y: number) => boolean): Observable<boolean> {
     const isAlive = pattern(x, y);
     this.nextCellState[x] = this.nextCellState[x] || [];
     this.nextCellState[x][y] = isAlive;

@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
-import { BoardService } from "../board.service";
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { BOARD } from "../board.tokens";
+import { Board } from "../model/board";
 
 @Component({
   selector: 'gol-grid',
@@ -9,7 +10,9 @@ import { BoardService } from "../board.service";
 export class GridComponent implements OnInit {
   @Input() dimension = 0;
 
-  constructor(private boardService: BoardService) { }
+  constructor(
+    @Inject(BOARD) private boardService: Board
+  ) { }
 
   ngOnInit() {
     this.boardService.setDimension(this.dimension);

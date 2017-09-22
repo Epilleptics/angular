@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { BoardService } from "./board.service";
 import { CellComponent } from "./cell/cell.component";
 import { GridComponent } from "./grid/grid.component";
+import { BOARD } from "./board.tokens";
 
 @NgModule({
   imports: [
@@ -12,7 +13,9 @@ import { GridComponent } from "./grid/grid.component";
     CellComponent,
     GridComponent
   ],
-  providers: [BoardService],
+  providers: [
+    {provide: BOARD, useClass: BoardService}
+  ],
   exports: [
     CellComponent,
     GridComponent

@@ -1,5 +1,6 @@
-import { Component, HostBinding, OnInit } from '@angular/core';
-import { BoardService } from "../board.service";
+import { Component, HostBinding, Inject, OnInit } from '@angular/core';
+import { Board } from "../model/board";
+import { BOARD } from "../board.tokens";
 
 @Component({
   selector: 'gol-cell',
@@ -9,7 +10,9 @@ import { BoardService } from "../board.service";
 export class CellComponent implements OnInit {
   @HostBinding('style.width') width:string;
 
-  constructor(private boardService: BoardService) { }
+  constructor(
+    @Inject(BOARD) private boardService: Board
+  ) { }
 
   ngOnInit(): void {
     this.boardService.getDimension().subscribe(dimension => this.width = 100 / dimension + '%');

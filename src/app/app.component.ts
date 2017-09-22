@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { CellsTrackerService } from './cells-tracker.service';
 import { fromPattern, PATTERN } from "./example/patterns";
-import { BOARD_DIMENSION } from "./app.token";
+import { BOARD_DIMENSION, CELL_TRACKER } from "./app.tokens";
+import { CellTracker } from "./model/cell-tracker";
 
 @Component({
   selector: 'app-root',
@@ -13,7 +13,7 @@ export class AppComponent implements OnInit{
   public cellMatrix: Array<Array<Observable<boolean>>> = [];
 
   constructor(
-    private cellTrackerService: CellsTrackerService,
+    @Inject(CELL_TRACKER) private cellTrackerService: CellTracker,
     @Inject(BOARD_DIMENSION) private dimension: number
   ) {}
 
